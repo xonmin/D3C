@@ -78,8 +78,44 @@
 - 모든 추상화 단계의 의도는 명확히 표현해야하기 때문에 POJO를 작성하고, 관점 혹은 관점과 유사한 매커니즘을 사용하여 각 구현 관심사를 분리해야한다.
 ---
 ### 📌 12장 창발성
-
-
+#### 창발적 설계로 깔끔한 코드를 구현하자
+- 단순한 설계 규칙 
+1. 모든 테스트를 실행해라 
+   - 테스트 케이스를 많이 작성할수록 DIP와 같은 원칙을 적용하고 DI, 인터페이스, 추상화 같은 도구를 사용해 결합도를 낮춘다.
+2. 중복을 없앤다.
+   - 템플릿 메소드 패턴(Template method)으로 중복 제거
+```java
+abstract public class VacationPolicy { 
+    public void accrueVacation() {
+        calculateBaseVacationHours() ; 
+        alterForLegalMinijnums() ; 
+        applyToPayroll();
+    }
+    
+    private void calculateBaseVacationHours() .{*/./.}; 
+    abstract protected void alterForLega!Minimums(); 
+    private void applyToPayrolK) .{*/./.};
+ }
+    
+public class USVacationPolicy extends VacationPolicy { 
+    @Override protected void alterForLegalMinimums() {
+    // 미국 최소 법정 일수를 사용한다. 
+    }
+}   
+  
+public class EUVacationPolicy extends VacationPolicy { 
+    @Override protected void alterForLegalMinimums() {
+    // 유럽연합 최소 법정 일수를 사용한다. }
+    }
+}
+```
+3. 프로그래머 의도를 표현한다.
+   - 좋은 이름 선택
+   - 함수와 클래스 크기 줄이기
+   - 표준 명칭 사용
+   - 단위 테스트 작성
+4. 클래스와 메소드 수를 최소로 줄인다.
 
 ---
 ### 📌 13장 동시성
+
