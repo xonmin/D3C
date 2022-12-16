@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4eb1d068-0ac1-425a-a886-535e5d025e2a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Week4/xonmin/img_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week4/xonmin/img_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week4/xonmin/img_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week4/xonmin/img_4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week4/xonmin/img_5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week4/xonmin/img_6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week4/xonmin/img_7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week4/xonmin/img_8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week4/xonmin/img_9.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Week4/xonmin/clean-architecture.md" beforeDir="false" afterPath="$PROJECT_DIR$/Week4/xonmin/clean-architecture.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,7 +176,7 @@
       <workItem from="1669635875262" duration="152000" />
       <workItem from="1670053620416" duration="4238000" />
       <workItem from="1670654638324" duration="2088000" />
-      <workItem from="1670745213017" duration="4254000" />
+      <workItem from="1670745213017" duration="5795000" />
     </task>
     <servers />
   </component>
