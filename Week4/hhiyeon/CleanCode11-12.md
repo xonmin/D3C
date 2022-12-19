@@ -115,7 +115,3 @@ public class EUVacationPolicy extends VacationPolicy {
    - 표준 명칭 사용
    - 단위 테스트 작성
 4. 클래스와 메소드 수를 최소로 줄인다.
-
----
-### 📌 13장 동시성
-
