@@ -64,6 +64,8 @@
   - 엔터프라이즈 프레임워크에 의존하지 않는다.
   - 상대적으로 단순하기 때문에 유지보수가 편하다.
 <img width="539" alt="스크린샷 2022-12-10 오후 4 28 08" src="https://user-images.githubusercontent.com/52193680/206838149-dfb697d5-a3d9-47c9-a8ed-b0879bbb13cf.png">
+
+
 - Bank 도메인 객체는 DAO(Data Accessor Object)으로 프록시 되었다.
 - DAO 객체는 JDBC 자료 소스로 프록시되었다.
 - 클라이언트는 Bank 객체의 getAccounts()를 호출한다고 생각하지만, 실제로는 Bank POJO 기본 동작을 확장한 중첩 DECORATOR(데코레이터) 객체 집합의 가장 외곽과 통신한다.
