@@ -127,6 +127,8 @@ public void testLogAddAppender() {
 - 지식이 별로 없는 상태에서 시스템을 개발하려고 하는 경우, 하위 시스템과 먼 부분부터 작업을 진행
 
 <img width="574" alt="스크린샷 2022-12-02 오후 2 20 22" src="https://user-images.githubusercontent.com/52193680/205220457-14041242-d7b1-48f9-b772-889421d525b2.png">
+
+
 - 송신기 API에서 CommunicationsController 분리
 - 다른 팀에서 송신기 API 정의 후에 TransmitterAdapter를 구현해 간극을 매운다.
 - ADAPTER 패턴(어댑터 패턴) 으로 API 사용을 켑슐화 해서 API가 바뀔 때 수정할 코드를 한 곳으로 모았다.
