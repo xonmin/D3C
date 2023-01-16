@@ -55,7 +55,43 @@ public static final Thing[] values() {
 ```
 ---
 #### 아이템 16. public 클래스에서는 public 필드가 아닌 접근자 메서드를 사용하라
+- 데이터 필드에 직접 접근할 수 있지만, 캡슐화의 이점을 제공할 수 없는 상황
+
+
+```java
+class Point {
+    public double x;
+    public double y; 
+}
+```
+
+
+ 필드들을 모두 private으로 바꾸고 public 접근자(getter) 추가
+- 접근자와 변경자(mutator) 메서드를 활용해 데이터를 캡슐화한다.
+
+
+```java
+class Point {
+    private double x; 
+    private double y;
+    
+    public Point(double xf double y) { 
+        this.x = x;
+        this.y = y; 
+    }
+
+    public double getX() { return x; } 
+    public double getY() { return y; }
+    
+    public void setX(double x) { this.x = x; }
+    public void setY(double y) { this.y = y; }
+}
+```
+
+- package-private 클래스 혹은 private 중첩 클래스에서는 데이터 필드를 노출해도 문제가 없다.
+- 패키지 바깥 코드는 변경하지 않아도 데이터 표현 방식을 바꿀 수 있다.
+---
+#### 아이템 17. 변경 가능성을 최소화하라
 
 
 ---
-
