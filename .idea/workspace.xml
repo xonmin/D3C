@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4eb1d068-0ac1-425a-a886-535e5d025e2a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Week6/xonmin/img.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week6/xonmin/img_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week6/xonmin/img_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Week10/xonmin/img.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Week10/xonmin/img_1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Week10/xonmin/realMySQL.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Week6/xonmin/clean-architecture.md" beforeDir="false" afterPath="$PROJECT_DIR$/Week6/xonmin/clean-architecture.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
