@@ -66,7 +66,112 @@ public final class Complex {
 - 다른 합당한 이유가 없으면 모든 필드는 private final 이어야 한다.
 - 생성자는 불변식 설정이 모두 완료된, 초기화가 완벽히 끝난 상태의 객체를 생성해야 한다.
 ---
-#### 아이템 18
+#### 아이템 18. 상속보다는 컴포지션을 사용하라
+- 상속 : 클래스가 다른 클래스를 확장하는 구현 상속
+- 메서드 호출과 다르게 상속은 캡슐화를 깨뜨린다.
+  - 상위 클래스에 따라 하위 클래스의 동작에 이상이 생길 수 있다.
+
+
+- 잘못된 상속 예시 : addAll 메서드로 원소 3개를 더했을 때
+
+
+```
+InstrumentedHashSet<String> s = new InstrumentedHashSeto();
+s.addAlKList.of("틱", "탁탁", "펑,,));
+```
+
+
+- getAddCount 메서드를 호출하면 3을 반환해야 하지만 6을 반환한다.
+- HashSet의 addAll 메서드가 add 메서드를 사용해 구현되어서 addCount에 값이 중복해서 더해져서 최종 값이 6으로 늘어났다.
+- 하위 클래스에서 addAll 메서드를 재정의하지 않으면 문제를 고칠 수 없다.
+
+
+```java
+public class InstrumentedHashSet<E> extends HashSet<E> {
+    private int addCount = 0;
+    
+    public InstrumentedHashSet() { }
+    
+    public InstrumentedHashSet(int initCap, float loadFactor) { 
+        super(initCap, LoadFactor);
+    }
+    
+    @Override public boolean add(E e) { 
+        addCount++;
+        return super.add(e); 
+    }
+    
+    @Override public boolean addAll(Collection<? extends E> c) { 
+        addCount += c.sizeO;
+        return super.addAll(c);
+    }
+    
+    public int getAddCount() { 
+        return addCount;
+    }
+}
+```
+
+
+- 컴포지션(composition) : 기존 클래스를 확장하는 대신, 새로운 클래스를 만들고 private 필드로 기존 클래스의 인스턴스를 참조하는 방법
+- 새 클래스의 인스턴스 메서드들은 기존 클래스의 대응하는 메서드를 호출해서 결과를 반환한다.
+
+
+- 래퍼 클래스
+  - 다른 Set 인스턴스를 감싸고 있는 뜻에서 래퍼 클래스라고 한다.
+  - 다른 계측 기능을 덧씌운다는 뜻에서 데코레이터 패턴(decorator pattern) 이라고도 부른다.
+  - 단점이 거의 없지만, 래퍼 클래스가 콜백(callback) 프레임워크와는 어울리지 않는다는 점을 주의해야 한다.
+
+
+```java
+public class InstrumentedSet<E> extends Fon시ardingSet<E> {
+    private int addCo나nt = 0;
+    public InstrumentedSet(Set<E> s) { 
+        super(s);
+    }
+    
+    @Override public boolean add(E e) { 
+        addCount++;
+        return super.add(e); 
+    }
+    
+    @Override public boolean addAll(Collection<? extends E> c) { 
+        addCount += c.size();
+        return super.addAll(c);
+    }
+    
+    public int getAddCount() { 
+    return addCount;
+}
+```
+
+
+- 재사용할 수 있는 전달(forwarding) 클래스
+
+
+```java
+public class ForwardingSet<E> implements Set<E> { 
+    private final Set<E> s;
+    public ForwardingSet(Set<E> s) { this.s = s; }
+    
+    public void clear() { s.clearO; }
+    public boolean contains(Object o) { return s.contains(o); }
+    public boolean isEmpty() { return s.isEmpty(); }
+    public int size() { return s.size(); }
+    public Iterator<E> iterater() { return s.iterator(); }
+    public boolean add(E e) { return s.add(e); }
+    public boolean remove(Object o) { return s.remove(o); }
+    public boolean containsAll(Collection<?> c) { return s.containsAll(c); } 
+    public boolean addAll(Collection<? extends E> c){ return s.addAH(c); } 
+    public boolean removeAll(Collection<?> c){ return s. removeAH(c); } 
+    public boolean retainAlKCollection<?> c){ return s. retainAlKc); } 
+    public Object[] toArrayO { return s.toArray(); } 
+    public <T> T[] toArray(T[] a) { return s.toArray(a); } 
+    @Override public boolean equals(Object o){ return s.equals(o); } 
+    @Override public int hashCode() { return s.hashCodef); } 
+    @Override public String toString() { return s.toString(); }
+}
+```
 
 ---
 
