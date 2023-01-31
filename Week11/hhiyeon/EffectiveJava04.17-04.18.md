@@ -172,6 +172,5 @@ public class ForwardingSet<E> implements Set<E> {
     @Override public String toString() { return s.toString(); }
 }
 ```
-
 ---
 
