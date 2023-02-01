@@ -46,7 +46,7 @@ InnoDB 서버의 버퍼풀은 쿼리의 성능과 매우 밀접한 관계
 목적 : 
 - DoubleWrite buffer에 더티 페이지를 작성함으로써, 데이터 파일 쓰기 중간에 실패할 때(비정상 종료) 해당 `버퍼의 내용`과  `file의 page들의 내용`을 비교하여 안정성과 무결성을 높인다.
 - 이름은 버퍼이나 Doublewrite Buffer 는 메모리가 아니라 데이터 파일
-- 시스템 변수 : `innodb_doublewrite`
+- 시스템 변수 : `innodb_doublewrite (default : ON)`
 
 ![image](https://user-images.githubusercontent.com/27190617/216042355-ef7bcfbd-b3bb-4e3e-8e89-2ae1aade8e38.png)
 
