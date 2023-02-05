@@ -94,10 +94,28 @@ static List<Integer> intArrayAsList(int[] a) {
 - 새로운 인터페이스를 만드는 경우에는 표준적인 메서드 구현을 제공하는 데 유용한 수단이 된다.
 ---
 #### 아이템 22. 인터페이스는 타입을 정의하는 용도로만 사용하라
+- 인터페이스는 자신을 구현한 클래스의 인스턴스를 참조할 수 있는 타입 역할
+- 자신의 인스턴스로 무엇을 할 수 있는지 클라이언트에게 알려줄 수 있다.
+- 지침에 맞지 않는 예시 : static final 필드로만 가득찬 인터페이스
 
 
+```java
+public interface PhysicalConstants {
+    // 아보가드로 수 (1/몰)
+    static final double AVOGADROS_NUMBER = 6.022_140_857e23; 
+    
+    // 볼츠만 상수 (J/K)
+    static final double BOLTZMANN_CONSTANT = 1.380_648_52e-23;
+    
+    // 전자 질량 (kg)
+    static final double ELECTRON_MASS = 9.109_383_56e-31; 
+}
+```
+---
+#### 아이템 23. 태그 달린 클래스보다는 클래스 계층구조를 활용하라
 
 ---
+
 
 
 
