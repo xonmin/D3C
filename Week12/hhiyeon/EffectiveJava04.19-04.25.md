@@ -113,11 +113,127 @@ public interface PhysicalConstants {
 ```
 ---
 #### 아이템 23. 태그 달린 클래스보다는 클래스 계층구조를 활용하라
+- 태그가 달린 클래스 
 
+
+```java
+class Figure {
+    enum Shape { RECTANGLE, CIRCLE };
+    
+    // 태그 필드 - 현재 모양을 나타낸다.
+    final Shape shape;
+    
+    // 다음 필드들은 모양이 사각형(RECTANGLE)일 때만 쓰인다. 
+    double length;
+    double width;
+    
+    // 다음 필드는 모양이 원(CIRCLE)일 때만 쓰인다. 
+    double radius;
+    
+    // 원용 생성자
+    Figure(double radius) { 
+        shape = Shape.CIRCLE; 
+        this.radius = radius;
+    }
+    
+    // 사각형용 생성자
+    Figure(double length, double width) { 
+        shape = Shape.RECTANGLE; 
+        this.length = length;
+        this.width = width;
+    }
+    
+    double area() { 
+        switch(shape) {
+            case RECTANGLE:
+                return length * width;
+            case CIRCLE:
+                return Math.PI * (radius * radius);
+            default:
+                throw new AssertionError(shape);
+        }
+    }
+}
+```
+
+
+- 태그가 있는 클래스 단점
+  - 열거 타입 선언, 태그 필드, switch 문 등등 쓸데없는 코드가 너무 많아 가독성이 나쁘다.
+  - 많은 메모리 사용
+  - 필드를 final로 선언하려면 쓰이지 않는 필드도 생성자에서 초기화해야 한다.
+  - 태그 달린 클래스는 장황하고, 오류가 생기기 쉽고, 비효율적이다.
+
+
+- 자바와 같은 객체지향 언어에서는 타입 하나로 다양한 의미의 객체를 표현하는 나은 수단을 제공한다.
+  - 클래스 계층 구조를 활용하는 서브타이핑(subtyping)
+
+
+- 태그 달린 클래스를 클래스 계층 구조로 변환
+
+
+```java
+abstract class Figure { 
+    abstract double area();
+}
+
+class Circle extends Figure { 
+    final double radius;
+    
+    Circle(double radius) { this.radius = radius; }
+    
+    @Override double area() { return Math.PI * (radius * radius); } 
+}
+
+class Rectangle extends Figure { 
+    final double length;
+    final double width;
+    
+    Rectangle(double length, double width) { 
+        this.length = length;
+        this.width = width;
+    }
+
+    @Override double area() { return length * width; } 
+}
+```
 ---
+#### 아이템 24. 멤버 클래스는 되도록 static으로 만들라
+- 중첩 클래스(nested class) 
+  - 다른 클래스 안에 정의된 클래스
+  - 자신을 감싼 바깥 클래스에서만 사용해야 한다.
+  - 종류 : 정적 멤버 클래스. (비정적) 멤버 클래스, 익명 클래스, 지역 클래스
+  - 정적 멤버 클래스를 제외한 나머지는 내부 클래스(inner class)
 
 
+- 정적 멤버 클래스
+  - 다른 클래스 안에 선언되고, 바깥 클래스의 private 멤버에 접근할 수 있다.
+  - 바깥 클래스와 함께 쓰일 때 유용한 public 도우미 클래스로 쓰인다.
+  - 중첩 클래스의 인스턴스가 바깥 인스턴스와 독립적으로 존재할 수 있으면 정적 멤버 클래스로 만들어야 한다.
 
 
+- 비정적 멤버 클래스
+  - 비정적 멤버 클래스의 인스턴스 메서드에서 정규화된 this를 사용해 바깥 인스턴스의 메서드를 호출하거나 바깥 인스턴스의 참조를 가져올 수 있다.
+  - 정규화된 this : 클래스명.this
+  - 바깥 인스턴스 없이 생성할 수 없다.
+  - 비정적 멤버 클래스의 인스턴스 안에 관계 정보가 만들어져 메모리 공간을 차지하고, 생성 시간이 더 걸린다.
+  - 어댑터 정의에 주로 사용된다.
+  - 멤버 클래스에서 바깥 인스턴스에 접근할 일이 없으면 정적 멤버 클래스로 만들어준다.
 
+
+- 익명 클래스
+  - 쓰이는 시점에 선언과 동시에 인스턴스가 만들어진다.
+  - 선언한 지점에서만 인스턴스를 만들 수 있고, 클래스 이름이 필요한 작업은 수행할 수 없다.
+  - 여러 인터페이스를 구현할 수 없고, 인터페이스를 구현하는 동시에 다른 클래스를 상속할 수 없다.
+  - 주로 사용되는 경우는 팩터리 메서드 구현
+
+
+- 지역 클래스
+  - 가장 드물게 사용되는 중첩 클래스
+  - 지역변수를 선언할 수 있는 곳이면 어디서든 선언 가능
+  - 유효 범위도 지역변수와 같다.
+  - 멤버 클래스처럼 이름이 있고 반복해서 사용 가능
+  - 익명 클래스처럼 비정적 문맥에서 사용될 때만 바깥 인스턴스를 참조할 수 있고, 정적 멤버는 가질 수 없고, 가독성을 위해 짧게 작성해야 한다.
+---
+#### 아이템 25. 톱레벨 클래스는 한 파일에 하나만 담으라
+- 컴파일러가 한 클래스에 대한 정의를 여러 개 만들지 않도록, 소스 파일 하나에 톱레벨 클래스를 하나만 담는다.
 ---
