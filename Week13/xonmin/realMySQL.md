@@ -106,3 +106,44 @@ Undo Tablespace : 언두 로그가 저장되는 공간
 언두로그 공간이 남는 것은 문제 X / **언두 로그 슬롯이 부족한 경우 tx를 시작할 수 없는 문제**
 - ~ v8.0 : 한 번 생성된 언두 로그 변경 허용 불가 (정적 사용)
 - v8.0 ~ : `CREATE UNDO TABLESPACE , DROP TABLESPACE`를 통해 언두 테이블 스페이스 동적 추가 및 삭제 가능  
+
+```sql
+// 동적 생성 
+sql > CREATE UNDO TABLESPACE extra_undo_003 ADD DATAFILE '/data/undo_dir/undo_003.ibu';
+
+//언두 테이블 스페이스 비활성화
+sql > ALTER UNDO TABLESPACE extra_undo_003 SET INACTIVE;
+
+// 비활성화된 테이블 스페이스 삭제
+sql > DROP UNDO TABLESPACE extra_undo_003;
+```
+
+**Undo tablespace truncate**
+- 언두 테이블스페이스 공간을 필요한 만큼만 남기고 불필요하거나 과도하게 할당된 공간을 운영체제로 반납하는 것 
+- 방법은 2가지 종류 존재
+- 자동 모드 : 
+  - 트랜잭션이 커밋되면 더 이상 언두 로그의 이전 값은 필요 없음
+  - **Undo Purge** : InnoDB 스토리지 엔진의 퍼지 스레드(Purge Thread) 는 주기 적으로 불필요한 언두 로그를 삭제 
+  - 언두 퍼지 빈도 수 줄이는 방법 : `innodb_purge_rseg_truncate_frequency`
+- 수동 모드 : 
+  1. `innodb_undo_log_truncate = OFF`(언두 테이블 스페이스를 비활성화 -> Purge Thread는 비활성 상태의 언두 테이블 스페이스를 찾아 OS에 공간 반납) 
+  2. 반납 완료 -> 언두 테이블스페이스 다시 활성화 
+  - 참고 : 수동 모드는 언두 테이블 스페이스가 최소 3개 이상 되어야 작동 
+
+```sql
+// 언두테이블스페이스 비활성화
+sql > ALTER UNDO TABLESPACE tablespace_name SET INACTIVE;
+
+// 퍼지 스레드에 의해 언두 테이블스페이스 공간 반납 후, 활성화 
+sql > ALTER UNDO TABLESPACE tablespace_name SET ACTIVE
+```
+
+ 
+###4.2.10 체인지 버퍼 
+참조 링크 : https://omty.tistory.com/59
+
+![image](https://user-images.githubusercontent.com/27190617/217253116-c5c9cf0f-2f18-49b6-8c8c-6f5bc8788dd5.png)
+
+체인지 버퍼 
+- 정의:  MySQL InnoDB에는 보조 인덱스 I/O 성능 향상을 위해 존재하는 임시 메모리 공간
+- index update 시, 랜덤하게 disk read가 필요하므로, 
