@@ -139,11 +139,56 @@ sql > ALTER UNDO TABLESPACE tablespace_name SET ACTIVE
 ```
 
  
-###4.2.10 체인지 버퍼 
+### 4.2.10 체인지 버퍼 
 참조 링크 : https://omty.tistory.com/59
 
-![image](https://user-images.githubusercontent.com/27190617/217253116-c5c9cf0f-2f18-49b6-8c8c-6f5bc8788dd5.png)
+![image](https://user-images.githubusercontent.com/27190617/217807669-0958f454-32f4-4ccc-a779-2328b0e39e7a.png)
 
-체인지 버퍼 
-- 정의:  MySQL InnoDB에는 보조 인덱스 I/O 성능 향상을 위해 존재하는 임시 메모리 공간
-- index update 시, 랜덤하게 disk read가 필요하므로, 
+
+**체인지 버퍼** 
+- 정의:  MySQL InnoDB에는 **보조 인덱스** I/O 성능 향상을 위해 존재하는 임시 메모리 공간
+- index update 시, 랜덤하게 disk read가 필요 
+  - 따라서 테이블에 index가 많다면, 필요 resource 증가 
+  - 변경해야할 index 페이지를 disk에서 읽어와 업데이트를 해야한다면 즉시 실행하는 것이 아닌,
+ **체인지 버퍼**에 저장해두고 사용자에게 결과 바로 반환 
+
+- 체인지 버퍼에 임시 저장된 인덱스 레코드 조각들은 추후 백그라운드 스레드(`체인지 버퍼 머지 스레드`)에 의해 병합
+
+> 유니크 인덱스와 체인지 버퍼 
+> 결과를 전달하기 전, **중복 여부**를 체크해야하는 유니크 인덱스의 경우, 체인지 버퍼를 사용할 수 없음
+> - 체인지 버퍼를 통하면 디스크 내부에 있는 인덱스들에 대한 체크가 되지 않기 때문에 둘은 서로 알맞은 용도가 되지 않음 
+
+- v8.0부터는 DML(`INSERT, DELETE, UPDATE`)에 대해서 선택적으로 체인지 버퍼 활성화 가능 
+  - `innodb_change_buffering` 시스템 변수를 통해 설정 가능 
+```sql
+SHOW variables LIKE 'innodb_change_buffering'
+```
+
+- `INSERT와 UPDATE`가 빈번할 경우 : `innodb_change_buffer_max_size`를 통해 체인지 버퍼의 메모리 공간 확보 가능  
+  - (default : 25% , max 50%)
+```sql
+SHOW variables LIKE 'innodb_change_buffer_max_size'
+```
+
+> 체인지 버퍼의 경우 DML 후 보조 인덱스를 최신 상태로 유지하는데 사용되는 상당한 I/O를 줄일 수 있습니다. 
+다만 과거 디스크가 느린 시절에 큰 효과가 있었지만 SSD 등 디스크의 성능이 개선됨에 따라 극적인 성능 개선을 가져오지는 않습니다. 
+또한 변경 사항이 많을 경우 재부팅, 복구 작업이 지연될 수 있기에 주의해야합니다.
+추가로 이러한 이유 때문인지 Aurora MySQL의 경우 체인지 버퍼를 사용하지 않습니다.(None으로 설정되어있으며 변경 불가)
+
+### 4.2.11 리두 로그 및 로그 버퍼 
+리두 로그 : 여러 문제점에 의해 비정상 종료시, 데이터 파일에 기록되지 못한 데이터를 잃지 않도록 하는 역할 (WAL - Write Ahead Log)
+- **리두 로그 내용을 통해 종료(장애) 직전의 상태로 복구**
+
+비정상 종료의 경우 : InnoDB 스토리지 엔진의 데이터 파일에서의 일관되지 않은 데이터 종류 
+1. 커밋됐지만 데이터 파일에 기록되지 않은 데이터
+- 리두 로그 내용을 통해서 데이터 파일에 복사
+2. 롤백됐지만 데이터 파일에 이미 기록된 데이터
+- 언두 로그(변경되기 이전 내용)을 데이터 파일에 복사 + **리두 로그**를 통해 변경작업에서 tx가 어떠한 상태였는 지 파악(commit or rollback or 진행중..) 
+
+redo log를 disk 동기화 주기 설정 
+- tx가 commit 될 때 마다 disk 에 기록하는 작업은 부하가 심함 
+- disk 동기화 주기 설정 : `innodb_flush_log_at_trx_commit`
+  - `0` : 1초에 한 번씩 리두 로그를 기록(write)/동기화 진행 - 서버가 비정상 종료되면 최대 1초동안의 tx가 커밋됐다해도, 해당 tx에서 변경된 데이터는 사라질 가능성 존재
+  - `1` : 매번 tx가 commit 할 때 마다 disk로 기록/동기화 수행 - tx가 commit 되면 tx에서 변경한 데이터는 사라진다. 
+  - `2` : 매 tx가 commit 될 떄마다 disk로 기록 진행 but **동기화(sync)는 1초에 한 번씩** 실행. tx가 커밋되면 os 메모리 버퍼로 기록되는 것은 보장 
+    - mysql이 비정상 종료되더라도 os가 정상이라면 해당 tx의 데이터는 사라지지 않지만, os또한 비정상 종료라면 최근 1초동안의 tx 데이터는 사라짐  
