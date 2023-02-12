@@ -229,10 +229,39 @@ sql > ALTER INSTANCE ENABLE INNODB REDO_LOG;
 
 ### 4.2.12 어댑티브 해시 인덱스 
 
-어댑티브 해시 인덱스(Adaptive Hash Index) : InnoDB 스토리지 엔진이 사용자가 자주 요청하는 데이터에 대해 자동 생성 인덱스 
-- `innodb_adaptive_hash_index`시스템 변술ㄹ 통해 인덱스 기능 활성화/비활성화 
+어댑티브 해시 인덱스(Adaptive Hash Index) : InnoDB 스토리지 엔진이 사용자가 자주 요청하는 데이터(자주 사용되는 칼럼)에 대해 바로 접근하기 위해 옵티마이저가 판단하여 자동 생성되는 인덱스 
+- 즉 전체 데이터를 대상으로는 해시값을 생성하지는 않는다.
+- `innodb_adaptive_hash_index`시스템 변수를 통해 인덱스 기능 활성화/비활성화 
 - MySQL 내에 B-Tree 검색 시간을 줄여주기 위해 도입된 기능
 - 자주 읽히는 데이터 페이지의 키 값을 통해 해시 인덱스를 생성후 필요시 어댑티브 해시 인덱스를 검색하여 레코드가 저장된 데이터 페이지 즉시 찾아가기 가능 
   - B-Tree를 root ~ leaf 까지 찾아가는 비용 절약 & 쿼리 성능 개선 & 더 많은 쿼리 동시 처리 가능 
   
+![image](https://user-images.githubusercontent.com/27190617/218296543-073812d1-8401-4d64-8b1a-9349206f3152.png)
 
+
+> **Hash index 구조**
+- Hash index 는 (index key : data 페이지의 메모리 주소) 로 구성
+- index key는 **B-Tree index id와 B-Tree 인덱스의 실제 key** 로 생성
+  - adaptive hash index key에 B-Tree index id가 포함되는 이유 : InnoDB 스토리지에 어댑티브 해시 인덱스는 하나만 존재하므로
+  - 즉, B-Tree 인덱스에 대해 어댑티브 해시 인덱스가 하나의 해시 인덱스에 저장 및 특정 키 값이 어느 인덱스에 속한 지 구분
+
+어댑티브 해시 인덱스도 결국 메모리 객체이므로 인덱스 경합(Contention)이 심했지만, 내부 잠금(세마포어) 경합을 줄이기 위해 파티션 기능 제공
+- `innodb_adaptive_hash_index_parts`를 통해 파티션 개수 변경 (default - 8개) 
+
+
+**어댑티브 해시 인덱스 효과 및 주의사항**
+성능 향상에 효과적일 때 : 
+- disk의 데이터가 InnoDB 버퍼 풀 크기와 비슷한 경우(disk read가 많지 않을 때)
+- 동등 조건 검색이 많은 경우(범위 쿼리 등이 없을 때) 
+- 쿼리가 데이터 중 일부 데이터에만 집중된 경우 
+
+ 주의 사항 : 
+ - 어댑티브 해시 인덱스 활성화 시, 해시 인덱스의 효율이 없는 쿼리에도 InnoDB는 해시 인덱스 사용 
+ - 특정 테이블의 인덱스가 해시 인덱스에 존재할 때 `DROP or ALTER`한다면 어댑티브 해시 인덱스에서도 제거해주어야함 
+ - 옵티마이저가 판단하여 해시 키로 만들기 때문에 제어가 어려우며, 수 개월 동안 사용되지 않던 테이블일지라도 기존 해시 자료 구조에 데이터가 남아 있게 되면, 테이블 Drop 시 영향을 줄 수 있음
+
+참조 ref: https://tech.kakao.com/2016/04/07/innodb-adaptive-hash-index/
+
+
+### 4.2.13 InnoDB와 MyISAM, MEMORY 스토리지 엔진 비교
+InnoDB가 짱!
