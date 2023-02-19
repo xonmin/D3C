@@ -85,15 +85,14 @@ select emp_no, max(salary) from salaries;
 - 슬로우 쿼리 / 제너럴 로그 파일의 내용이 너무 많아 검토하기 어려울 경우, Percona Toolkit의 pt-query-digest 스크립트를 사용하여 빈도/처리성능별로 쿼리 정렬 가능
     - 슬로우 쿼리 통계
         - 모든 쿼리를 대상으로 슬로우 쿼리 로그의 실행 시간 / 잠금 대기 시간 등에 대해 평균/회소/회대값 표시
-        - <img width="744" alt="image" src="https://media.oss.navercorp.com/user/19195/files/821ec334-2cf5-4241-9f7f-5d0b16b921af">
+        - ![image](https://user-images.githubusercontent.com/27190617/219934932-ab59131e-8de5-40e9-ad92-b5640ddf76fd.png)
     - 실행 빈도 및 누적 실행 시간순 랭킹
         - 같은 모양의 쿼리라면 동일한 Query ID를 갖게 됌
-        - <img width="727" alt="image" src="https://media.oss.navercorp.com/user/19195/files/7566f68d-3257-47f3-8abc-fc1a9ab78c49">
+        - ![image](https://user-images.githubusercontent.com/27190617/219934935-224221c2-8b47-4ea0-abac-4535c7275f3f.png)
     - 쿼리별 실행 횟수 및 누적 실행 시간 상세정보
         - 특정 쿼리에 대한 자세한 내용을 보여줌
-        - <img width="753" alt="image" src="https://media.oss.navercorp.com/user/19195/files/0a6ab31e-e9a8-4747-ba18-27dfd50b8995">
-        - <img width="742" alt="image" src="https://media.oss.navercorp.com/user/19195/files/f5828add-d925-4520-beef-54ae7463af02">
-
+        - ![image](https://user-images.githubusercontent.com/27190617/219934937-e1d6099f-1dec-4810-89df-9a45a204b9c0.png)
+        - ![image](https://user-images.githubusercontent.com/27190617/219934942-11ade0ab-fbcc-4fc4-a6df-d4e4d9494603.png)
 
 
 
