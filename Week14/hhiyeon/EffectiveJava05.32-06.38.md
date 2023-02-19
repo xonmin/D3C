@@ -89,3 +89,64 @@ public class Text {
 }
 ```
 ---
+#### 아이템 37. ordinal 인덱싱 대신 EnumMap을 사용하라
+- 배열이나 리스트에서 원소를 꺼낼 때 ordinal 메서드로 인덱스를 얻는 경우가 있다.
+- 동작은 되지만 배열은 제네릭과 호환이 되지 않아 비검사 형변환을 수행해야 하고 깔끔하게 컴파일 되지 않는다.
+- EnumMap : 열거 타입을 키로 사용하도록 설계한 Map 구현체
+
+```java
+Map<Plant.LifeCycle, Set<Plant» plantsByLifeCycle = 
+  new EnumMapo(Plant.LifeCycle.class);
+for (Plant.LifeCycle Ic : Plant.LifeCycle.values()) 
+  plantsByLifeCycle.put(lc, new HashSeto());
+
+for (Plant p : garden)
+  plantsByLifeCycle. get (p.lifeCycle).add(p);
+System.out.printIn(plantsByLifeCycle);
+```
+
+
+- stream과 EnumMap 사용해서 데이터와 열거 타입 매핑
+
+
+```java
+System.out.printIn(Arrays.stream(garden)
+  .collect(groupingBy(p -> p.LifeCycle,
+    () -> new EnumMap<>(LifeCycle.class), toSet())));
+```
+---
+#### 아이템 38. 확장할 수 있는 열거 타입이 필요하면 인터페이스를 사용하라
+- 타입 안전 열거 패턴은 열거 타입과 다르게 확장할 수 있다.
+- 기본 연산 외에 사용자 확장 연산을 추가해야 하는 경우
+  - 연산 코드용 인터페이스를 정의하고 열거 타입이 인터페이스를 구현하게 한다.
+  - 하지만 열거 타입끼리 구현을 상속할 수 없다.
+
+
+```java
+public interface Operation {
+  double apply(double x, double y);
+}
+
+  public enum BasicOperation implements Operation { 
+    PLUS("+") {
+      public double apply(double x, double y) {return x + y; } 
+    MINUS("-") {
+      public double apply(double x, double y) {return x - y; } 
+    TIMES("*") {
+      public double apply(double x, double y) {return x * y; } 
+    DIVIDE("/") {
+      public double apply(double x, double y) {return x / y; } 
+    };
+    
+    private final String symbol;
+    
+    BasicOperation(String symbol) { 
+      this.symbol = symbol;
+    }
+    
+    @Override public String toString() { 
+      return symbol;
+    }
+  }
+```
+---
