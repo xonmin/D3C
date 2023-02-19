@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4eb1d068-0ac1-425a-a886-535e5d025e2a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Week10/xonmin/img.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week10/xonmin/img_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Week10/xonmin/realMySQL.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Week14/realmysql.md" beforeDir="false" afterPath="$PROJECT_DIR$/Week14/realmysql.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,6 +182,7 @@
       <workItem from="1671191193152" duration="227000" />
       <workItem from="1671272106586" duration="709000" />
       <workItem from="1671945302392" duration="2763000" />
+      <workItem from="1676787327185" duration="1176000" />
     </task>
     <servers />
   </component>
@@ -195,11 +194,22 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="42" />
+                  <entry key="Table.Default.Date.ColumnIdWidth" value="44" />
+                  <entry key="Table.Space.CommitStatus.ColumnIdWidth" value="15" />
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add: MyISAM storage engine architecture" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
