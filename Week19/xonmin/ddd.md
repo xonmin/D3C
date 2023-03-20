@@ -14,7 +14,7 @@
 > 프로젝션 : 쓰기 모델을 통해 이벤트 소싱 시스템에 저장된 데이터를 다양한 읽기 모델을 적용해 원하는 시점의 데이터를 추출 
 
 ```C++
-pulic class LeadSearchModelProjection {
+public class LeadSearchModelProjection {
   public long LeadId { get; private set; }
   public HashSet<string> FirstNames {}
   public HashSet<PhoneNumber> PhoneNumbers {get; private set; }
