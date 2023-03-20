@@ -45,8 +45,7 @@ pulic class LeadSearchModelProjection {
 ### 원천 데이터 
 - 이벤트 소싱 패턴이 작동하려면 객체 상태에 대한 모든 변경사항이 이벤트로 표현되고 저장되어야 함 
 - 여기서 이벤트는 **시스템의 원천 데이터의 역할**
-
-[사진]
+![image](https://user-images.githubusercontent.com/27190617/226333797-0de4b1f4-3fab-4893-b579-61eaa53a24b5.png)
 
 ### 이벤트 스토어 
 - 시스템의 이벤트를 저장하는 DB 
