@@ -1,2 +1,2 @@
 # D3C
-Developer Couples compete on a commit
+Developer Couples compete on a commit.
