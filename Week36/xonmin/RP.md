@@ -201,7 +201,9 @@ public class Example6_6 {
 }
 ```
 `justOrEmpty()` : `just()` 의 경우 null을 허용하지 않지만, 반대로 null을 허용 
+
 `concatWith()`: Upstream에서 오는 데이터에 추가적인 데이터를 붙여서 emit 한다. 
+
 ![image](https://github.com/xonmin/D3C/assets/27190617/9fe090cd-7968-4f82-86b4-813ab91fc162)
 
 ```java 
