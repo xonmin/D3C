@@ -167,3 +167,55 @@ emitted data: 2022-02-09T16:55:15.85956+09:00
 emitted onComplete singal
 ```
 - 위의 예시 코드는 Non-blockign I/O 방식 통신이 아니기 때문에 논블락의 이점을 얻을 수 없음 
+
+### Flux 
+- 0~n 개의 데이터를 emit 하는 Publisher 타입
+
+```java
+public class Example6_4 {
+    public static void main(String[] args) {
+        Flux.just(6, 9, 13)
+                .map(num -> num % 2)
+                .subscribe(System.out::println);
+    }
+}
+
+// 결과 0, 1, 1
+
+public class Example6_5 {
+    public static void main(String[] args) {
+        Flux.fromArray(new Integer[]{3, 6, 7, 9})
+                .filter(num -> num > 6)
+                .map(num -> num * 2)
+                .subscribe(System.out::println);
+    }
+}
+
+public class Example6_6 {
+    public static void main(String[] args) {
+        Flux<String> flux =
+                Mono.justOrEmpty("Steve")
+                        .concatWith(Mono.justOrEmpty("Jobs"));
+        flux.subscribe(System.out::println);
+    }
+}
+```
+`justOrEmpty()` : `just()` 의 경우 null을 허용하지 않지만, 반대로 null을 허용 
+`concatWith()`: Upstream에서 오는 데이터에 추가적인 데이터를 붙여서 emit 한다. 
+![image](https://github.com/xonmin/D3C/assets/27190617/9fe090cd-7968-4f82-86b4-813ab91fc162)
+
+```java 
+public class Example6_7 {
+    public static void main(String[] args) {
+        Flux.concat(
+                        Flux.just("Mercury", "Venus", "Earth"),
+                        Flux.just("Mars", "Jupiter", "Saturn"),
+                        Flux.just("Uranus", "Neptune", "Pluto"))
+                .collectList()
+                .subscribe(planets -> System.out.println(planets));
+    }
+}
+```
+- concat()에서 리턴하는 Publisher 는 Mono? Flux? : Flux - 3개의 Flux 를 9개의 Flux로 emit 한다.
+- collectList() 에서 리턴하는 Publisher 는 Mono? Flux? : Mono - List 자체 하나만 반환하므로 mono
+
