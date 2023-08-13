@@ -214,7 +214,7 @@ public class Example11_5 {
 ### Context는 Operator 체인의 아래에서 위로 전파된다. 
 - 만약 동일한 키에 대해 값을 중복 저장하면 가장 위쪽에 위치한 contextWrite() 가 저장한 값으로 덮어씌여진다.
 
-````java
+```java
 @Slf4j
 public class Example11_6 {
     public static void main(String[] args) throws InterruptedException {
@@ -237,10 +237,12 @@ public class Example11_6 {
     }
 }
 ```
+
 - context에는 분명 Bill 을 저장했으나, Steve 가 출력되는데 이 이유는 Operator 체인 상 아래에서 위로 전파되는 특징이 있어 그렇다.
 
 코드의 흐름
-1.) Applte 이란 회사 명 저장
+
+1) Applte 이란 회사 명 저장
 ```java
 .contextWrite(context -> context.put(key1, "Apple"))
 ```
@@ -251,6 +253,7 @@ public class Example11_6 {
         mono.map(data -> data + ", " + ctx.getOrDefault(key2, "Steve"))
 )
 ```
+
   - 이 때 getOrDefault 말고 get() 사용 -> `NoSuchElementException` 발생
   - 모든 Operator 에서 Context에 저장된 데이터를 읽을 수 있도록 contextWrite() 은 Operator 맨 마지막에 위치 시켜야 한다.
 
